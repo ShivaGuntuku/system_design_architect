@@ -4,6 +4,7 @@ from sqlalchemy import JSON
 from typing import Any, Dict, Optional
 
 from models.architecture import Base, Architecture, TimestampMixin
+from .connections import Connection
 
 COMPONENT_TYPES = [
     "load_balancer",
@@ -30,4 +31,8 @@ class Component(Base, TimestampMixin, table=True):
         default_factory=dict, sa_column=Column(JSON)
     )
 
-    architecture: Optional[Architecture] = Relationship(back_populates="components")
+    architecture: Optional["Architecture"] = Relationship(back_populates="components")
+    outgoing_connections: list["Connection"] = Relationship(
+        back_populates="source_component"
+    )
+    incoming_connections: list["Connection"] = Relationship(back_populates="target_component")

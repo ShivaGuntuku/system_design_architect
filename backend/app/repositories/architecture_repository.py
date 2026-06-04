@@ -28,3 +28,7 @@ class ArchitectureRepository:
     @staticmethod
     def list_all(db: Session):
         return db.query(Architecture).order_by(Architecture.created_at.desc()).all()
+
+    @staticmethod
+    def delete(db: Session, architecture_id:UUID) -> Architecture | None:
+        pass
