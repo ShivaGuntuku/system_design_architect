@@ -1,28 +1,35 @@
+from typing import Optional, TYPE_CHECKING
+from datetime import datetime
 
-from typing import Optional
-from uuid import UUID, uuid4
+from sqlmodel import Field, Relationship
+from sqlalchemy import Column, DateTime
+from sqlalchemy.sql import func
 
+from .base import Base
 
-from sqlmodel import Field, SQLModel, Relationship
-from base import TimestampMixin
-from .components import Component
-from .connections import Connection
+if TYPE_CHECKING:
+    from .components import Component
+    from .connections import Connection
 
-
-class Base(SQLModel):
-    id: UUID = Field(default_factory=uuid4, primary_key=True)
-
-
-class Architecture(Base, TimestampMixin, table=True):
+class Architecture(Base,  table=True):
     __tablename__ = "architectures"
 
     name: str = Field(index=True, unique=True)
 
     description: Optional[str] = None
 
-    components: list["Component"] = Relationship(
-        back_populates="architecture"
+    created_at: Optional[datetime] = Field(
+        default=None,
+        sa_column=Column(DateTime(timezone=True), server_default=func.now())
     )
-    connections: list["Connection"] = Relationship(
-        back_populates="architecture"
+
+    updated_at: Optional[datetime] = Field(
+        default=None,
+        sa_column=Column(
+            DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+        )
     )
+
+    components: list["Component"] = Relationship(back_populates="architecture")
+    connections: list["Connection"] = Relationship(back_populates="architecture")
+

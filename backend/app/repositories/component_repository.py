@@ -28,8 +28,8 @@ class ComponentRepository:
         )
 
     @staticmethod
-    def list_by_architecture(db: Session, architecture_id: UUID):
-        return db.query(Component).filter_by(Component.carchitecture_id).first()
+    def list_by_architecture(db: Session, architecture_id: UUID) -> Component | None:
+        return (db.query(Component).filter(Component.architecture_id==architecture_id))
 
     @staticmethod
     def delete(db: Session, component_id: UUID):

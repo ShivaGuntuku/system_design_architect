@@ -11,9 +11,9 @@ class ComponentService:
     @staticmethod
     def create_component(db: Session, payload: ComponentCreate, architecture_id:UUID) -> Component:
         architecture = (ArchitectureRepository.get_by_id(db, architecture_id=architecture_id))
-
         if not architecture:
             raise HTTPException(status_code=404, detail= "Architecture not found")
+        
         
         existing = ComponentRepository.get_by_name(db=db, name=payload.name, architecture_id=architecture_id)
         if existing:
@@ -21,7 +21,7 @@ class ComponentService:
         component = Component(name=payload.name, 
                               component_type=payload.component_type,
                               config=payload.config,
-                              architecture_id=architecture_id)
+                              architecture_id=architecture.id)
         return ComponentRepository.create(db=db, component=component)
     
     @staticmethod

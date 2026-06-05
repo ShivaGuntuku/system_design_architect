@@ -20,7 +20,6 @@ class ConnectionRepository:
         return (
             db.query(Connection)
             .filter(Connection.architecture_id == architecture_id)
-            .first()
         )
 
     @staticmethod

@@ -1,10 +1,15 @@
 from uuid import UUID
+from datetime import datetime
 from sqlmodel import Field, Column, Relationship
-from sqlalchemy import JSON
-from typing import Any, Dict, Optional
+from sqlalchemy import JSON, DateTime
+from sqlalchemy.sql import func
+from typing import Any, Dict, Optional, TYPE_CHECKING
 
-from models.architecture import Base, Architecture, TimestampMixin
-from .connections import Connection
+if TYPE_CHECKING:
+    from app.models.architecture import Architecture
+    from app.models.connections import Connection
+
+from .base import Base
 
 COMPONENT_TYPES = [
     "load_balancer",
@@ -16,23 +21,36 @@ COMPONENT_TYPES = [
     "kafka",
     "queue",
     "cdn",
-    "api_gateway"
+    "api_gateway",
 ]
 
-class Component(Base, TimestampMixin, table=True):
+
+class Component(Base, table=True):
     __tablename__ = "components"
-    
-    architecture_id: UUID = Field(
-        foreign_key="architectures.id"
-    )
+
+    architecture_id: UUID = Field(foreign_key="architectures.id")
     name: str = Field(index=True)
-    component_type: str 
-    config: Dict[str, Any] = Field(
-        default_factory=dict, sa_column=Column(JSON)
+    component_type: str
+    config: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
+
+    created_at: Optional[datetime] = Field(
+        default=None,
+        sa_column=Column(DateTime(timezone=True), server_default=func.now())
+    )
+
+    updated_at: Optional[datetime] = Field(
+        default=None,
+        sa_column=Column(
+            DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+        )
     )
 
     architecture: Optional["Architecture"] = Relationship(back_populates="components")
     outgoing_connections: list["Connection"] = Relationship(
-        back_populates="source_component"
+        back_populates="source_component",
+        sa_relationship_kwargs={"foreign_keys": "[Connection.source_component_id]"},
     )
-    incoming_connections: list["Connection"] = Relationship(back_populates="target_component")
+    incoming_connections: list["Connection"] = Relationship(
+        back_populates="target_component",
+        sa_relationship_kwargs={"foreign_keys": "[Connection.target_component_id]"},
+    )
