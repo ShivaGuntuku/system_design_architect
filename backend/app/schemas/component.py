@@ -34,8 +34,16 @@ class ComponentRead(BaseModel):
     config: Dict[str, Any]
     created_at: datetime
     updated_at: Optional[datetime]
-
+    x_position: float
+    y_position: float
     model_config = {
         "from_attributes": True
     }
 
+class ComponentUpdate(BaseModel):
+    name: str | None = None
+    config: dict | None = None
+
+class PositionUpdate(BaseModel):
+    x_position: float
+    y_position: float

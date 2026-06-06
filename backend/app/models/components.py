@@ -32,7 +32,8 @@ class Component(Base, table=True):
     name: str = Field(index=True)
     component_type: str
     config: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
-
+    x_position: float = Field(default=100)
+    y_position: float = Field(default=100)
     created_at: Optional[datetime] = Field(
         default=None,
         sa_column=Column(DateTime(timezone=True), server_default=func.now())

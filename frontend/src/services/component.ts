@@ -26,4 +26,17 @@ export const ComponentService = {
 
     return response.data;
   },
+  async updatePosition(
+    componentId: string,
+    x: number,
+    y: number
+  ) {
+    return api.patch(
+      `/components/${componentId}/position`,
+      {
+        x_position: x,
+        y_position: y,
+      }
+    );
+  }
 };

@@ -3,7 +3,7 @@ from uuid import UUID
 from app.api.dependencies import get_db
 from app.schemas.architecture import ArchitectureCreate, ArchitectureRead
 from app.services.architecture_service import ArchitectureService
-from app.schemas.component import ComponentCreate, ComponentRead
+from app.schemas.component import ComponentCreate, ComponentRead, PositionUpdate
 from app.services.component_service import ComponentService
 from app.services.connection_service import ConnectionService
 from app.schemas.connection import ConnectionCreate, ConnectionRead
@@ -79,3 +79,4 @@ def get_graph(architecture_id: UUID, db: Session = Depends(get_db)):
 def validate_architecture(architecture_id: UUID, db: Session = Depends(get_db)):
 
     return GraphService.validate_graph(db=db, architecture_id=architecture_id)
+

@@ -29,7 +29,7 @@ class ComponentRepository:
 
     @staticmethod
     def list_by_architecture(db: Session, architecture_id: UUID) -> Component | None:
-        return (db.query(Component).filter(Component.architecture_id==architecture_id))
+        return db.query(Component).filter(Component.architecture_id == architecture_id)
 
     @staticmethod
     def delete(db: Session, component_id: UUID):
@@ -38,3 +38,21 @@ class ComponentRepository:
     @staticmethod
     def exists(db: Session, component_id: UUID) -> bool:
         pass
+
+    @staticmethod
+    def update_position(
+        db: Session,
+        component_id: UUID,
+        x: float,
+        y: float,
+    ):
+        component = db.get(Component, component_id)
+
+        component.x_position = x
+        component.y_position = y
+
+        db.add(component)
+        db.commit()
+        db.refresh(component)
+
+        return component

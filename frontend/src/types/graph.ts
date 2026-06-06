@@ -4,6 +4,8 @@ export interface GraphComponent {
   name: string;
   component_type: string;
   config: Record<string, any>;
+  x_position: number;
+  y_position: number;
 }
 
 export interface GraphConnection {

@@ -34,3 +34,17 @@ class ComponentService:
 
     def delete_component():
         pass
+
+    @staticmethod
+    def update_position(
+        db: Session,
+        component_id: UUID,
+        x: float,
+        y: float,
+    ):
+        return ComponentRepository.update_position(
+            db=db,
+            component_id=component_id,
+            x=x,
+            y=y,
+        )

@@ -16,13 +16,20 @@ const nodeTypes = {
 interface Props {
   nodes: Node[];
   edges: Edge[];
+
   onConnect?: any;
+  onNodesChange?: any;
+  onEdgesChange?: any;
+  onNodeDragStop?: any;
 }
 
 export default function ArchitectureCanvas({
   nodes,
   edges,
   onConnect,
+  onNodesChange,
+  onEdgesChange,
+  onNodeDragStop,
 }: Props) {
   return (
     <div
@@ -36,7 +43,12 @@ export default function ArchitectureCanvas({
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
+
         onConnect={onConnect}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onNodeDragStop={onNodeDragStop}
+        
       />
     </div>
   );

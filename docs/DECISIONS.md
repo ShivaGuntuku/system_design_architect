@@ -5,6 +5,7 @@ docker run --name system_design_db \
   -p 5432:5432 \
   -d postgres
 
+uvicorn app.main:app --reload
 
 alembic init alembic
 alembic revision --autogenerate -m "create_architectures_table"
